@@ -14,7 +14,6 @@ public class AnswerService {
     public void create(Question question, String content) {
         Answer answer = Answer.builder()
                 .content(content)
-                .createDate(LocalDateTime.now())
                 .question(question)
                 .build();
         answerRepository.save(answer);

@@ -4,6 +4,7 @@ import com.mysite.sbb.question.Question;
 import com.mysite.sbb.question.QuestionRepository;
 import com.mysite.sbb.answer.Answer;
 import com.mysite.sbb.answer.AnswerRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,19 +24,19 @@ class SbbApplicationTests {
 	@Autowired
 	private AnswerRepository answerRepository;
 
-	@Test
-	void contextLoads() {
+	@BeforeEach
+	void beforeEach() {
+		questionRepository.deleteAll();
+		questionRepository.clearAutoIncrement();
+		init_data();
 	}
 
-	@Test
-	void test_질문_저장() {
-		// given
+	void init_data() {
 		Question q1 = Question.builder()
 				.subject("sbb가 무엇인가요?")
 				.content("sbb에 대해서 알고 싶습니다.")
 				.createDate(LocalDateTime.now())
 				.build();
-
 
 		Question q2 = Question.builder()
 				.subject("스프링부트 모델 질문입니다.")

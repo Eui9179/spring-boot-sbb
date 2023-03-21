@@ -18,7 +18,7 @@ public class AnswerController {
     private final QuestionService questionService;
 
     @PostMapping("/create/{id}")
-    public String createAnswer(Model model, @PathVariable Integer id, @RequestParam String content) {
+    public String createAnswer(@PathVariable Integer id, @RequestParam String content) {
         Question question = questionService.getQuestion(id);
 
         answerService.create(question, content);
