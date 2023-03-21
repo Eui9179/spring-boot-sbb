@@ -30,4 +30,8 @@ public class Answer {
 
     @ManyToOne
     private Question question;
+
+    public void setQuestion(Question question) {
+        this.question = question;
+    }
 }

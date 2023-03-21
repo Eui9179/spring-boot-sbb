@@ -10,6 +10,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -32,11 +33,16 @@ public class Question {
     @CreatedDate
     private LocalDateTime createDate;
 
+    @Builder.Default
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
-    private List<Answer> answerList;
+    private List<Answer> answerList = new ArrayList<>();
 
     public void updateSubject(String subject) {
         this.subject = subject;
     }
 
+    public void addAnswer(Answer answer) {
+        answerList.add(answer);
+        answer.setQuestion(this);
+    }
 }
