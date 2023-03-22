@@ -23,7 +23,8 @@ public class Question300Test {
         for (int i = 0; i < 300; i++) {
             questionService.create(
                     String.format("test %03d", i),
-                    "test content"
+                    "test content",
+                    null
             );
         }
 

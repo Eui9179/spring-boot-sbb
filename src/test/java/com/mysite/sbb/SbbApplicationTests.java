@@ -21,14 +21,4 @@ class SbbApplicationTests {
 
 	@Autowired
 	private QuestionService questionService;
-
-	@Test
-	void insertQuestionData() {
-		for (int i = 0; i < 300; i++) {
-			String subject = String.format("test [%03d]", i);
-			String content = "내용 없음";
-
-			questionService.create(subject, content);
-		}
-	}
 }
