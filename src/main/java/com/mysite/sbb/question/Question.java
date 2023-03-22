@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -34,6 +35,9 @@ public class Question {
     @CreatedDate
     private LocalDateTime createDate;
 
+    @LastModifiedDate
+    private LocalDateTime modifyDate;
+
     @Builder.Default
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     private List<Answer> answerList = new ArrayList<>();
@@ -45,8 +49,14 @@ public class Question {
         this.subject = subject;
     }
 
+    public void modify (String subject, String content) {
+        this.subject = subject;
+        this.content = content;
+    }
+
     public void addAnswer(Answer answer) {
         answerList.add(answer);
         answer.setQuestion(this);
     }
+
 }
