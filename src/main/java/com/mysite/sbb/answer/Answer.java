@@ -42,4 +42,8 @@ public class Answer {
     public void setQuestion(Question question) {
         this.question = question;
     }
+
+    public void modify(String content) {
+        this.content = content;
+    }
 }
