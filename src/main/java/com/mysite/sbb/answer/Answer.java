@@ -12,6 +12,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Getter
 @NoArgsConstructor
@@ -38,6 +39,9 @@ public class Answer {
 
     @ManyToOne
     private SiteUser author;
+
+    @ManyToMany
+    private Set<SiteUser> voter;
 
     public void setQuestion(Question question) {
         this.question = question;
