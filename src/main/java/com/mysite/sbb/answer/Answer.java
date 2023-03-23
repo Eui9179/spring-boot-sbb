@@ -50,4 +50,8 @@ public class Answer {
     public void modify(String content) {
         this.content = content;
     }
+
+    public void addVoter(SiteUser siteUser) {
+        voter.add(siteUser);
+    }
 }
