@@ -1,12 +1,15 @@
 package com.mysite.sbb.question;
 
 import com.mysite.sbb.DataNotFoundException;
+import com.mysite.sbb.answer.Answer;
 import com.mysite.sbb.user.SiteUser;
+import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,13 +32,13 @@ public class QuestionService {
                 .orElseThrow(() -> new DataNotFoundException("question not found"));
     }
 
-    public void create(String subject, String content, SiteUser user) {
+    public Question create(String subject, String content, SiteUser user) {
         Question q = Question.builder()
                 .subject(subject)
                 .content(content)
                 .author(user)
                 .build();
-        questionRepository.save(q);
+        return questionRepository.save(q);
     }
 
     public Page<Question> getList(int page) {
@@ -57,5 +60,23 @@ public class QuestionService {
     public void vote(Question question, SiteUser siteUser) {
         question.getVoter().add(siteUser);
         questionRepository.save(question);
+    }
+
+    private Specification<Question> search(String kw) {
+        return new Specification<Question>() {
+            private static final long serialVersionUID = 1L;
+            @Override
+            public Predicate toPredicate(Root<Question> question, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+                query.distinct(true);
+                Join<Question, SiteUser> u1 = question.join("author", JoinType.LEFT);
+                Join<Question, Answer> a = question.join("answerList", JoinType.LEFT);
+                Join<Answer, SiteUser> u2 = question.join("author", JoinType.LEFT);
+                return criteriaBuilder.or(criteriaBuilder.like(question.get("subject"), "%" + kw + "%"),
+                        criteriaBuilder.like(question.get("content"), "%" + kw + "%"),
+                        criteriaBuilder.like(u1.get("username"), "%" + kw + "%"),
+                        criteriaBuilder.like(a.get("content"), "%" + kw + "%"),
+                        criteriaBuilder.like(u2.get("username"), "%" + kw + "%"));
+            }
+        };
     }
 }
