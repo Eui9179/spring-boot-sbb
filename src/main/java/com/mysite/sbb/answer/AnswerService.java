@@ -17,13 +17,14 @@ public class AnswerService {
     private final UserService userService;
 
     @Transactional
-    public void create(Question question, String content, SiteUser author) {
+    public Answer create(Question question, String content, SiteUser author) {
         Answer answer = Answer.builder()
                 .content(content)
                 .author(author)
                 .build();
         question.addAnswer(answer);
         answerRepository.save(answer);
+        return answer;
     }
 
     public Answer getAnswer(Integer id) {
@@ -48,6 +49,7 @@ public class AnswerService {
     @Transactional
     public void vote(Integer answerId, String username) {
         Answer answer = this.getAnswer(answerId);
-        answer.addVoter(userService.getUser(username));
+        SiteUser user = userService.getUser(username);
+        answer.addVoter(user);
     }
 }
